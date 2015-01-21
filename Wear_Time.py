@@ -1,4 +1,5 @@
 from collections import deque
+import string
 
 #Function to determine whether all vm values in a window are '0'
 def all_zeros(window, threshold):
@@ -13,8 +14,9 @@ def all_zeros(window, threshold):
 def first_window(window, rowlist, infile, outfile, threshold, vm, subject_start, date_start, separate):
 
     window.clear()
+    rowlist[vm] = string.strip(rowlist[vm])
     window.append(rowlist[vm])
-
+    
     for i in range(0,threshold-1):
         prev_line = infile.tell()
         row = infile.readline()
@@ -33,6 +35,7 @@ def first_window(window, rowlist, infile, outfile, threshold, vm, subject_start,
                 infile.seek(prev_line)
                 break
             else:
+                rowlist[vm] = string.strip(rowlist[vm])
                 window.append(rowlist[vm])
     
     return window;
@@ -40,6 +43,7 @@ def first_window(window, rowlist, infile, outfile, threshold, vm, subject_start,
 #Function to slide the window over one spot.
 def slide_window(window, rowlist):
 
+    rowlist[vm] = string.strip(rowlist[vm])
     window.append(rowlist[vm])
     window.popleft()
     
@@ -80,14 +84,15 @@ row = infile.readline()
 rowlist = row.split(',')
 i=0
 for x in rowlist:
-    if x == 'vm' or x == 'vm\n':
+    x = string.strip(x)
+    if x == 'vm':
         vm = i
-    if x == 'ID' or x == 'ID\n':
+    if x == 'ID':
         subject = i
-    if x == 'Date' or x == 'Date\n':
+    if x == 'Date':
         date = i
     i=i+1
-
+    
 #Initializing variables.
 window=deque()#Contains a number of vm values equal to threshold.
 zeros = False#Indicates whether the current window is all zeros.
@@ -125,7 +130,7 @@ while not end_file:
         
         #Read in the first window.
         window = first_window(window, rowlist, infile, outfile, threshold, vm, subject_start, date_start, separate);
-
+        
         #If the number of data points was smaller than threshold, we will output 2's.
         if len(window) < threshold:
             outlist=['2']*len(window)
