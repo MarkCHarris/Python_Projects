@@ -168,7 +168,7 @@ while not end_file:
             rowlist = row.split(',')
 
     else:
-        #Read the next line and check wether it is a new subject, new day, or end of file.
+        #Read the next line and check whether it is a new subject, new day, or end of file.
         row = infile.readline()
         if row == '':
             end_file = True
@@ -179,7 +179,7 @@ while not end_file:
             if separate and rowlist[date] != date_start:
                 end_date = True
 
-        #If we have finished the current day, send the data in outlist to the output file.      
+        #If we have finished the current day, send the data in outlist to the output file.
         if end_file or end_subject or end_date:
             for i in outlist:
                 print>>outfile, i
