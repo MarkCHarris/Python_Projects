@@ -180,6 +180,7 @@ def main():
 	                  # the current subject or date.
 	is_nonwear = False # Indicates whether we are known to be in a period of non wear time.
 	last_nonzero = -1 # Indicates where the last nonzero value of the tracked variable was.
+	row_count = 0 # Tracks how many rows of data have been processed.
 	
 	# Read the first row of data.
 	row = infile.readline()
@@ -189,6 +190,8 @@ def main():
 
 	# Loop over the entire file.
 	while not end_file:
+		
+		row_count = row_count+1
 		
 		# If we are starting a new subject or a new day.
 		if end_subject or end_date:
@@ -272,6 +275,7 @@ def main():
 	infile.close()
 	
 	# Tell the user how long it took to process the data.
+	print "Number of Wear Time data points calculated:", row_count
 	print "Seconds elapsed:", time.time() - start
 
 if __name__ == '__main__':
